@@ -12,11 +12,32 @@ $( document ).ready(function() {
           <button type="button" class="btn btn-default fa fa-stop"></button>\
         </div>\
       </div>\
-      ');
+    ');
     $(e).find('a').on('click', function (evt) {
       evt.preventDefault();
     });
-    $(e).find('.fa-copy');
+  });
+
+  var _defaults = {
+  moviePath:         "assets/flash/zeroclipboard.swf",
+  trustedOrigins:    null,
+  // hoverClass:        "btn-primary",
+  activeClass:       "btn-primary",
+  allowScriptAccess: "sameDomain", 
+  useNoCache:        true,
+  forceHandCursor:   true,
+  zIndex:            99999
+  };
+  ZeroClipboard.setDefaults( _defaults );
+
+  var clip = new ZeroClipboard($(".fa-copy"));
+  clip.on( "load", function(client) {
+    // client.on( "complete", function(client, args) {
+    // });
+    clip.on( 'dataRequested', function (client, args) {
+      var link = $(this).parents('li').find('a').attr('href');
+      client.setText( '[' +link + ']' );
+    });
   });
 
   $('#query').on('keyup', function(e){
@@ -29,14 +50,8 @@ $( document ).ready(function() {
     }else{
       $searchExplain.html( 'Achados <b>' + $results.size() + '</b> resultados para o termo <b>' + query + '</b>'  );
     }
-  })
+  });
+
+  
 });
 
-// var clip = new ZeroClipboard( document.getElementById("copy-button"), {
-//   moviePath: "assets/flash/zeroclipboard.swf"
-// });
-// clip.on( "load", function(client) {
-//   client.on( "complete", function(client, args) {
-//     console.log("Copied text to clipboard: " + args.text );
-//   } );
-// } );
